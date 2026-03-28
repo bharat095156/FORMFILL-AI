@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FormFillAI — Interactive Demo</title>
+  <meta name="description" content="See FormFillAI in action. Watch how AI fills forms in seconds across different scenarios."/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    .demo-input {
+      width: 100%; padding: 0.65rem 0.9rem;
+      border: 1.5px solid var(--border); border-radius: 8px;
+      font-size: 0.88rem; font-family: 'Inter', sans-serif;
+      background: var(--bg-alt); color: var(--text); transition: var(--transition);
+    }
+    .demo-input.filled { border-color: var(--success); background: rgba(16,185,129,0.05); color: var(--success); font-weight: 500; }
+    .demo-field-group { margin-bottom: 0.9rem; }
+    .demo-field-group label { font-size: 0.8rem; font-weight: 500; color: var(--text-muted); display: block; margin-bottom: 0.3rem; }
+    .fill-progress { height: 8px; background: var(--border); border-radius: 4px; margin: 1.5rem 0; overflow: hidden; }
+    .fill-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 4px; width: 0%; transition: width 0.3s ease; }
+    .fill-status { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a class="navbar-brand" href="index.html"><div class="logo-icon">⬡</div>FormFillAI</a>
+    <div class="navbar-links">
+      <a href="index.html">Home</a>
+      <a href="demo.html" class="active">Demo</a>
+      <a href="security.html">Security</a>
+    </div>
+    <div class="navbar-cta">
+      <a href="login.html" class="btn btn-secondary">Login</a>
+      <a href="dashboard.html" class="btn btn-primary">Dashboard</a>
+    </div>
+  </nav>
+
+  <!-- DEMO HERO -->
+  <section class="demo-hero">
+    <div class="container">
+      <div class="hero-badge" style="background:rgba(255,255,255,0.2);color:white;margin-bottom:1rem">⚡ Live Demo — No signup required</div>
+      <h2>See FormFillAI in Action</h2>
+      <p style="margin:1rem 0">Choose a scenario and watch AI fill your forms instantly</p>
+      <div class="scenario-btns">
+        <button class="scenario-btn active" onclick="selectScenario('job', this)">💼 Job Application</button>
+        <button class="scenario-btn" onclick="selectScenario('student', this)">🎓 Student Registration</button>
+        <button class="scenario-btn" onclick="selectScenario('pro', this)">⭐ Professional Tasks</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO AREA -->
+  <section class="section section-alt">
+    <div class="container">
+      <div style="max-width:640px;margin:0 auto">
+        <!-- Form -->
+        <div class="demo-form-container" id="demo-form-area">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem">
+            <div>
+              <h3 id="demo-form-title">Job Application Form</h3>
+              <p style="font-size:0.83rem" id="demo-form-sub">TechCorp Inc. · Software Engineer</p>
+            </div>
+            <button class="btn btn-primary" onclick="runDemo()" id="fill-btn">🤖 Autofill Now</button>
+          </div>
+
+          <div class="fill-status" id="fill-status">Ready to autofill · <span id="field-count">0</span> / <span id="field-total">8</span> fields completed</div>
+          <div class="fill-progress"><div class="fill-bar" id="fill-bar"></div></div>
+
+          <div id="demo-fields"></div>
+
+          <div id="demo-result" class="demo-result">
+            <div style="font-size:3rem;margin-bottom:0.75rem">🎉</div>
+            <h2 style="color:white;margin-bottom:0.5rem">Demo Complete!</h2>
+            <p style="color:rgba(255,255,255,0.8)">See how FormFillAI transformed your form-filling experience</p>
+            <div class="result-stats">
+              <div class="result-stat"><div class="val" id="time-saved">5:24</div><div class="lbl">Time Saved</div></div>
+              <div class="result-stat"><div class="val">99.7%</div><div class="lbl">Accuracy Rate</div></div>
+              <div class="result-stat"><div class="val" id="fields-done">8/8</div><div class="lbl">Fields Completed</div></div>
+            </div>
+            <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+              <a href="login.html" class="btn btn-white">Create Account with Demo Data</a>
+              <button class="btn btn-outline-white" onclick="resetDemo()">Try Another Scenario</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- How it works -->
+        <div class="card" style="margin-top:2rem">
+          <h4 style="margin-bottom:1rem">How the AI Works</h4>
+          <div style="display:flex;flex-direction:column;gap:0.75rem">
+            <div style="display:flex;gap:0.75rem;align-items:flex-start">
+              <div style="width:28px;height:28px;background:rgba(79,70,229,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:var(--primary);flex-shrink:0">1</div>
+              <div><strong style="font-size:0.88rem">Field Detection</strong><p style="font-size:0.82rem">Scans all input, textarea, and select elements on the page</p></div>
+            </div>
+            <div style="display:flex;gap:0.75rem;align-items:flex-start">
+              <div style="width:28px;height:28px;background:rgba(79,70,229,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:var(--primary);flex-shrink:0">2</div>
+              <div><strong style="font-size:0.88rem">Smart Mapping</strong><p style="font-size:0.82rem">Matches field labels (name/full name/username) to your stored data</p></div>
+            </div>
+            <div style="display:flex;gap:0.75rem;align-items:flex-start">
+              <div style="width:28px;height:28px;background:rgba(79,70,229,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:var(--primary);flex-shrink:0">3</div>
+              <div><strong style="font-size:0.88rem">Instant Fill</strong><p style="font-size:0.82rem">Populates fields and fires input events for React/Vue/Angular compatibility</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-banner">
+    <div class="container">
+      <h2>Start Filling Forms Automatically</h2>
+      <p>Create your free account and install the Chrome Extension in 2 minutes</p>
+      <div class="cta-buttons">
+        <a href="login.html" class="btn btn-white btn-lg">🚀 Get Started Free</a>
+        <a href="index.html" class="btn btn-outline-white btn-lg">Learn More</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo"><div class="logo-icon" style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#4F46E5,#8B5CF6);color:white;font-size:0.9rem">⬡</div> FormFillAI</div>
+          <p>Your intelligent AI assistant for effortless form completion across all platforms.</p>
+        </div>
+        <div class="footer-col"><h4>Product</h4><ul><li><a href="demo.html">Demo</a></li><li><a href="dashboard.html">Dashboard</a></li><li><a href="#">Chrome Extension</a></li></ul></div>
+        <div class="footer-col"><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Blog</a></li><li><a href="#">Contact</a></li></ul></div>
+        <div class="footer-col"><h4>Support</h4><ul><li><a href="#">Help Center</a></li><li><a href="security.html">Privacy</a></li><li><a href="#">Terms</a></li></ul></div>
+      </div>
+      <div class="footer-bottom">© 2025 FormFillAI. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    const scenarios = {
+      job: {
+        title: 'Job Application Form',
+        sub: 'TechCorp Inc. · Software Engineer',
+        fields: [
+          { label: 'Full Name', value: 'Sarah Johnson' },
+          { label: 'Email Address', value: 'sarah.johnson@gmail.com' },
+          { label: 'Phone Number', value: '+1 (555) 234-5678' },
+          { label: 'LinkedIn Profile', value: 'linkedin.com/in/sarahjohnson' },
+          { label: 'Current Company', value: 'StartupXYZ' },
+          { label: 'Years of Experience', value: '5 years' },
+          { label: 'City', value: 'San Francisco, CA' },
+          { label: 'Cover Letter Summary', value: 'Passionate software engineer with 5 years in full-stack development...' },
+        ]
+      },
+      student: {
+        title: 'Student Registration Form',
+        sub: 'MIT Online Learning Platform',
+        fields: [
+          { label: 'Student Name', value: 'Marcus Johnson' },
+          { label: 'Email', value: 'marcus.j@mit.edu' },
+          { label: 'Student ID', value: 'MIT-2024-0892' },
+          { label: 'Program', value: 'Computer Science' },
+          { label: 'Year of Study', value: '3rd Year' },
+          { label: 'Home Address', value: '142 Charles Street, Cambridge' },
+          { label: 'Emergency Contact', value: 'Rebecca Johnson (Mother)' },
+        ]
+      },
+      pro: {
+        title: 'Professional Services Form',
+        sub: 'Client Onboarding · Consulting',
+        fields: [
+          { label: 'Consultant Name', value: 'Elena Rodriguez' },
+          { label: 'Business Email', value: 'elena@erodriguez.consulting' },
+          { label: 'Firm Name', value: 'Rodriguez Consulting LLC' },
+          { label: 'Phone', value: '+1 (415) 988-7654' },
+          { label: 'Service Type', value: 'Business Strategy' },
+          { label: 'Billing Address', value: '300 Market Street, Suite 12, SF' },
+          { label: 'Tax ID / EIN', value: '82-3456789' },
+          { label: 'Bank Name', value: 'Chase Business Banking' },
+          { label: 'Account Type', value: 'Business Checking' },
+        ]
+      }
+    };
+
+    let currentScenario = 'job';
+    let filling = false;
+
+    function selectScenario(key, btn) {
+      if (filling) return;
+      currentScenario = key;
+      document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderFields();
+      resetBars();
+    }
+
+    function renderFields() {
+      const sc = scenarios[currentScenario];
+      document.getElementById('demo-form-title').textContent = sc.title;
+      document.getElementById('demo-form-sub').textContent = sc.sub;
+      const total = sc.fields.length;
+      document.getElementById('field-total').textContent = total;
+      document.getElementById('field-count').textContent = '0';
+      document.getElementById('fields-done').textContent = `0/${total}`;
+      document.getElementById('fill-bar').style.width = '0%';
+      document.getElementById('fill-status').textContent = `Ready to autofill · 0 / ${total} fields completed`;
+      document.getElementById('demo-result').classList.remove('show');
+      document.getElementById('fill-btn').style.display = '';
+
+      const container = document.getElementById('demo-fields');
+      container.innerHTML = sc.fields.map((f, i) => `
+        <div class="demo-field-group">
+          <label>${f.label}</label>
+          <input class="demo-input" id="dfield-${i}" placeholder="${f.label}" readonly/>
+        </div>
+      `).join('');
+    }
+
+    function resetBars() {
+      document.getElementById('fill-bar').style.width = '0%';
+      document.getElementById('field-count').textContent = '0';
+      filling = false;
+    }
+
+    async function runDemo() {
+      if (filling) return;
+      filling = true;
+      const sc = scenarios[currentScenario];
+      const btn = document.getElementById('fill-btn');
+      btn.innerHTML = '<span class="loader"></span> AI Filling...';
+      btn.disabled = true;
+
+      for (let i = 0; i < sc.fields.length; i++) {
+        await delay(350 + Math.random() * 200);
+        const input = document.getElementById(`dfield-${i}`);
+        input.value = sc.fields[i].value;
+        input.classList.add('filled');
+        const pct = Math.round(((i + 1) / sc.fields.length) * 100);
+        document.getElementById('fill-bar').style.width = pct + '%';
+        document.getElementById('field-count').textContent = i + 1;
+        document.getElementById('fill-status').textContent = `Filling... ${i + 1} / ${sc.fields.length} fields completed`;
+      }
+
+      await delay(600);
+      document.getElementById('fill-status').textContent = `✅ All ${sc.fields.length} fields filled successfully!`;
+      document.getElementById('fields-done').textContent = `${sc.fields.length}/${sc.fields.length}`;
+      document.getElementById('time-saved').textContent = `${sc.fields.length - 1}:${20 + sc.fields.length}`;
+      setTimeout(() => {
+        document.getElementById('demo-result').classList.add('show');
+        btn.style.display = 'none';
+      }, 800);
+    }
+
+    function resetDemo() {
+      filling = false;
+      const btn = document.getElementById('fill-btn');
+      btn.innerHTML = '🤖 Autofill Now';
+      btn.disabled = false;
+      btn.style.display = '';
+      renderFields();
+    }
+
+    function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+    // Init
+    renderFields();
+  </script>
+</body>
+</html>

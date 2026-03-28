@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FormFillAI — Security &amp; Privacy Center</title>
+  <meta name="description" content="FormFillAI uses enterprise-grade 256-bit AES encryption, zero-knowledge architecture, and GDPR compliance to protect your data."/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    .privacy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+    .privacy-point { display: flex; gap: 0.75rem; margin-bottom: 1.25rem; }
+    .privacy-point .pp-icon { color: var(--success); font-size: 1.1rem; flex-shrink: 0; margin-top: 2px; }
+    .privacy-point strong { display: block; margin-bottom: 0.2rem; font-size: 0.95rem; }
+    .privacy-point p { font-size: 0.85rem; }
+    .cert-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }
+    .cert-card { background: white; border-radius: var(--radius); padding: 1.5rem; text-align: center; border: 1px solid var(--border); }
+    .cert-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .cert-badge { display: inline-block; font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.6rem; border-radius: var(--radius-full); margin-top: 0.5rem; }
+    .cert-badge.green { background: rgba(16,185,129,0.1); color: var(--success); }
+    .cert-badge.blue { background: rgba(79,70,229,0.1); color: var(--primary); }
+    .cert-badge.orange { background: rgba(245,158,11,0.1); color: var(--warning); }
+    .cert-badge.red { background: rgba(244,63,94,0.1); color: var(--danger); }
+    .collect-section { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .collect-card { background: white; border-radius: var(--radius); padding: 1.5rem; border: 1px solid var(--border); }
+    .collect-card h4 { margin-bottom: 0.75rem; display: flex; gap: 0.5rem; align-items: center; }
+    .collect-card ul li { font-size: 0.84rem; color: var(--text-muted); padding: 0.25rem 0; display: flex; align-items: center; gap: 0.4rem; }
+    .collect-card ul li.yes::before { content: '✓'; color: var(--success); font-weight: 700; }
+    .collect-card ul li.no::before { content: '✕'; color: var(--danger); font-weight: 700; }
+    .control-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+    .control-card { text-align: center; padding: 1.5rem 1rem; background: white; border-radius: var(--radius); border: 1px solid var(--border); }
+    .control-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a class="navbar-brand" href="index.html"><div class="logo-icon">⬡</div>FormFillAI</a>
+    <div class="navbar-links">
+      <a href="index.html">Home</a>
+      <a href="demo.html">Demo</a>
+      <a href="security.html" class="active">Security</a>
+    </div>
+    <div class="navbar-cta">
+      <a href="login.html" class="btn btn-secondary">Login</a>
+      <a href="dashboard.html" class="btn btn-primary">Dashboard</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="security-hero">
+    <div class="container" style="text-align:center">
+      <div class="security-icon">🛡️</div>
+      <h1>Your Data, <span class="gradient-text">Your Control</span></h1>
+      <p style="max-width:580px;margin:1rem auto 0;font-size:1.05rem">
+        FormFillAI is built on a privacy-first philosophy with zero-knowledge architecture, ensuring your personal information remains completely secure and under your control.
+      </p>
+      <div style="display:flex;gap:2rem;justify-content:center;margin-top:2.5rem;flex-wrap:wrap">
+        <div style="text-align:center"><div style="font-size:1.4rem;font-weight:800;color:var(--primary)">256-bit</div><div style="font-size:0.8rem;color:var(--text-muted)">AES Encryption</div></div>
+        <div style="text-align:center"><div style="font-size:1.4rem;font-weight:800;color:var(--success)">Zero</div><div style="font-size:0.8rem;color:var(--text-muted)">Knowledge</div></div>
+        <div style="text-align:center"><div style="font-size:1.4rem;font-weight:800;color:var(--warning)">GDPR</div><div style="font-size:0.8rem;color:var(--text-muted)">Compliant</div></div>
+        <div style="text-align:center"><div style="font-size:1.4rem;font-weight:800;color:var(--danger)">SOC 2</div><div style="font-size:0.8rem;color:var(--text-muted)">Type II</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIVACY PHILOSOPHY -->
+  <section class="section">
+    <div class="container">
+      <div class="privacy-grid">
+        <div>
+          <h2>Privacy-First Philosophy</h2>
+          <p style="margin:1rem 0 1.75rem">At FormFillAI, we believe that intelligent automation shouldn't come at the cost of your privacy. Our zero-knowledge architecture ensures that your personal data remains encrypted and inaccessible to anyone—including us.</p>
+          <div class="privacy-point"><span class="pp-icon">✅</span><div><strong>End-to-End Encryption</strong><p>Your data is encrypted before it leaves your device and remains encrypted throughout processing.</p></div></div>
+          <div class="privacy-point"><span class="pp-icon">✅</span><div><strong>User Data Ownership</strong><p>You own your data completely. Export, delete, or modify your information at any time.</p></div></div>
+          <div class="privacy-point"><span class="pp-icon">✅</span><div><strong>Minimal Data Collection</strong><p>We collect only what's necessary for functionality and never sell your information.</p></div></div>
+        </div>
+        <div>
+          <div class="data-flow">
+            <h4 style="margin-bottom:1rem;color:var(--text);font-size:0.9rem">Data Flow Security</h4>
+            <div class="flow-step">
+              <div class="flow-icon">💻</div>
+              <div>
+                <div style="font-weight:600;font-size:0.88rem">Your Device</div>
+                <div style="font-size:0.78rem;color:var(--text-muted)">Local encryption</div>
+              </div>
+              <div class="flow-status encrypted">Encrypted</div>
+            </div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step">
+              <div class="flow-icon">📡</div>
+              <div>
+                <div style="font-weight:600;font-size:0.88rem">Secure Transit</div>
+                <div style="font-size:0.78rem;color:var(--text-muted)">TLS 1.3 encryption</div>
+              </div>
+              <div class="flow-status protected">Protected</div>
+            </div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step">
+              <div class="flow-icon">🤖</div>
+              <div>
+                <div style="font-weight:600;font-size:0.88rem">AI Processing</div>
+                <div style="font-size:0.78rem;color:var(--text-muted)">Zero-knowledge learning</div>
+              </div>
+              <div class="flow-status anon">Anonymous</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI TRANSPARENCY -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>AI Transparency</h2>
+        <p>Understanding how our AI learns and processes your data without compromising your privacy</p>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="feature-icon">🧠</div>
+          <h3>Federated Learning</h3>
+          <p>Our AI learns from patterns across all users without ever accessing individual data. Models are trained on encrypted, aggregated insights.</p>
+          <ul class="feature-check" style="margin-top:0.75rem">
+            <li>Local pattern recognition</li>
+            <li>Encrypted model updates</li>
+            <li>Aggregated learning only</li>
+            <li>No raw data sharing</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="feature-icon">📱</div>
+          <h3>On-Device Processing</h3>
+          <p>Critical AI operations happen directly on your device, ensuring your most sensitive data never leaves your control.</p>
+          <ul class="feature-check" style="margin-top:0.75rem">
+            <li>Form field recognition</li>
+            <li>Data validation</li>
+            <li>Personal preferences</li>
+            <li>Offline functionality</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="feature-icon">👁️</div>
+          <h3>Pattern Recognition</h3>
+          <p>We identify form structures and field types through anonymized pattern analysis, improving accuracy without accessing sensitive content.</p>
+          <ul class="feature-check" style="margin-top:0.75rem">
+            <li>Form structure patterns</li>
+            <li>Field type recognition</li>
+            <li>UI element mapping</li>
+            <li>Workflow optimization</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INDUSTRY CERTIFICATIONS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Industry Certifications</h2>
+        <p>Independently verified security and compliance standards</p>
+      </div>
+      <div class="cert-grid">
+        <div class="cert-card">
+          <div class="cert-icon">✅</div>
+          <h4>SOC 2 Type II</h4>
+          <p style="font-size:0.8rem;margin:0.5rem 0">Comprehensive security controls audit covering availability and confidentiality</p>
+          <div class="cert-badge green">Certified 2024</div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-icon">🇪🇺</div>
+          <h4>GDPR Compliant</h4>
+          <p style="font-size:0.8rem;margin:0.5rem 0">Full compliance with European Union data protection regulations and user rights</p>
+          <div class="cert-badge blue">EU Verified</div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-icon">🏛️</div>
+          <h4>CCPA Compliant</h4>
+          <p style="font-size:0.8rem;margin:0.5rem 0">California Consumer Privacy Act compliance with transparent data practices</p>
+          <div class="cert-badge orange">CA Certified</div>
+        </div>
+        <div class="cert-card">
+          <div class="cert-icon">🏥</div>
+          <h4>HIPAA Ready</h4>
+          <p style="font-size:0.8rem;margin:0.5rem 0">Healthcare-grade security for medical forms and sensitive health information</p>
+          <div class="cert-badge red">Healthcare Approved</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT WE COLLECT -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>Clear Data Handling</h2>
+        <p>No legal jargon — just honest explanations of how we handle your information</p>
+      </div>
+      <div class="collect-section">
+        <div class="collect-card">
+          <h4><span>📋</span> What We Collect</h4>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.75rem">Profile Information</p>
+          <ul>
+            <li class="yes">Name and contact details</li>
+            <li class="yes">Professional information</li>
+            <li class="yes">Preferences and settings</li>
+          </ul>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin:0.75rem 0">Usage Analytics</p>
+          <ul>
+            <li class="yes">Form completion patterns</li>
+            <li class="yes">Feature usage statistics</li>
+            <li class="yes">Performance metrics</li>
+          </ul>
+        </div>
+        <div class="collect-card">
+          <h4><span>⚙️</span> How We Use It</h4>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin-bottom:0.75rem">Core Functionality</p>
+          <ul>
+            <li class="yes">Automated form filling</li>
+            <li class="yes">AI model personalization</li>
+            <li class="yes">Account management</li>
+          </ul>
+          <p style="font-size:0.8rem;color:var(--text-muted);margin:0.75rem 0">Service Improvement</p>
+          <ul>
+            <li class="yes">Feature development</li>
+            <li class="yes">Bug fixes and optimization</li>
+            <li class="yes">Security enhancements</li>
+          </ul>
+        </div>
+        <div class="collect-card">
+          <h4><span>🚫</span> What We Never Do</h4>
+          <ul style="margin-bottom:0.75rem">
+            <li class="no">Sell your personal data</li>
+            <li class="no">Share with advertisers</li>
+          </ul>
+          <ul>
+            <li class="no">Access encrypted content</li>
+            <li class="no">Store payment information</li>
+          </ul>
+          <div style="margin-top:1rem;padding:0.75rem;background:rgba(16,185,129,0.07);border-radius:8px;border:1px solid rgba(16,185,129,0.2)">
+            <p style="font-size:0.78rem;color:var(--success)">✅ We are committed to never monetizing your personal data.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- USER CONTROL -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Complete User Control</h2>
+        <p>Your data, your rules. Manage every aspect of your privacy settings</p>
+      </div>
+      <div class="control-grid">
+        <div class="control-card">
+          <div class="control-icon">📤</div>
+          <h4>Data Export</h4>
+          <p style="font-size:0.82rem;margin:0.5rem 0">Download all your data in standard formats anytime</p>
+          <button class="btn btn-secondary btn-sm" style="margin-top:0.5rem">Export Data</button>
+        </div>
+        <div class="control-card">
+          <div class="control-icon">🗑️</div>
+          <h4>Account Deletion</h4>
+          <p style="font-size:0.82rem;margin:0.5rem 0">Permanently delete your account and all associated data</p>
+          <button class="btn btn-sm" style="background:rgba(244,63,94,0.1);color:var(--danger);margin-top:0.5rem">Delete Account</button>
+        </div>
+        <div class="control-card">
+          <div class="control-icon">🤖</div>
+          <h4>AI Training Opt-out</h4>
+          <p style="font-size:0.82rem;margin:0.5rem 0">Control whether your usage patterns help improve our AI</p>
+          <button class="btn btn-secondary btn-sm" style="margin-top:0.5rem">Manage Settings</button>
+        </div>
+        <div class="control-card">
+          <div class="control-icon">🔗</div>
+          <h4>Sharing Control</h4>
+          <p style="font-size:0.82rem;margin:0.5rem 0">Granular permissions for third-party integrations</p>
+          <button class="btn btn-secondary btn-sm" style="margin-top:0.5rem">Review Permissions</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-banner">
+    <div class="container">
+      <h2>Security You Can Trust</h2>
+      <p>Start using FormFillAI with complete confidence in your data privacy</p>
+      <div class="cta-buttons">
+        <a href="login.html" class="btn btn-white btn-lg">🚀 Get Started Free</a>
+        <a href="demo.html" class="btn btn-outline-white btn-lg">▶ See Demo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo"><div class="logo-icon" style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#4F46E5,#8B5CF6);color:white;font-size:0.9rem">⬡</div> FormFillAI</div>
+          <p>Your intelligent AI assistant for effortless form completion across all platforms.</p>
+        </div>
+        <div class="footer-col"><h4>Product</h4><ul><li><a href="demo.html">Demo</a></li><li><a href="dashboard.html">Dashboard</a></li><li><a href="#">Chrome Extension</a></li></ul></div>
+        <div class="footer-col"><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Blog</a></li><li><a href="#">Contact</a></li></ul></div>
+        <div class="footer-col"><h4>Support</h4><ul><li><a href="#">Help Center</a></li><li><a href="security.html">Privacy</a></li><li><a href="#">Terms</a></li></ul></div>
+      </div>
+      <div class="footer-bottom">© 2025 FormFillAI. All rights reserved.</div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FormFillAI — Your AI Assistant for Every Form</title>
+  <meta name="description" content="FormFillAI automates form filling with AI. Store your profiles securely in the cloud and autofill any online form instantly with our Chrome extension."/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    .faq-item { border-bottom: 1px solid var(--border); }
+    .faq-question { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 0; cursor: pointer; font-weight: 600; }
+    .faq-answer { padding-bottom: 1.25rem; font-size: 0.92rem; color: var(--text-muted); display: none; }
+    .faq-item.open .faq-answer { display: block; }
+    .faq-icon { transition: var(--transition); font-size: 1.2rem; color: var(--primary); }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <div class="logo-icon">⬡</div>
+      FormFillAI
+    </div>
+    <div class="navbar-links">
+      <a href="index.html" class="active">Home</a>
+      <a href="demo.html">Demo</a>
+      <a href="security.html">Security</a>
+    </div>
+    <div class="navbar-cta">
+      <a href="login.html" class="btn btn-secondary">Login</a>
+      <a href="dashboard.html" class="btn btn-primary">Dashboard</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-text">
+          <div class="hero-badge">🤖 AI Powered · Instant Autofill</div>
+          <h1>Your <span>AI Assistant</span> for Every Form</h1>
+          <p>Transform tedious form-filling into effortless automation. Our AI learns your preferences and fills forms instantly with 99.7% accuracy.</p>
+          <div class="hero-buttons">
+            <a href="login.html" class="btn btn-primary btn-lg">🚀 Start Free Profile</a>
+            <a href="demo.html" class="btn btn-secondary btn-lg">▶ Watch 2-Min Demo</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-item"><div class="stat-num">12,847</div><div class="stat-label">Forms Completed Today</div></div>
+            <div class="stat-item"><div class="stat-num green">2,156</div><div class="stat-label">Hours Saved This Month</div></div>
+            <div class="stat-item"><div class="stat-num red">99.7%</div><div class="stat-label">Accuracy Rate</div></div>
+          </div>
+        </div>
+        <div class="hero-widget">
+          <div class="demo-widget">
+            <div class="demo-widget-header">
+              <div class="dot-row"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+              <h4>Live Demo · Event Registration</h4>
+              <div class="ai-badge">AI Powered</div>
+            </div>
+            <div class="demo-field">
+              <div class="demo-field-label">Full Name</div>
+              <div class="demo-field-value">Sarah Johnson <span class="check">✓</span></div>
+            </div>
+            <div class="demo-field">
+              <div class="demo-field-label">Company</div>
+              <div class="demo-field-value">TechCorp Inc. <span class="check">✓</span></div>
+            </div>
+            <div class="demo-field">
+              <div class="demo-field-label">Dietary Preference</div>
+              <div class="demo-field-value">Vegetarian <span class="check">✓</span></div>
+            </div>
+            <div class="demo-progress">
+              <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);"><span>Auto-filling progress</span><span>100%</span></div>
+              <div class="demo-progress-bar"><div class="demo-progress-fill"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Intelligent Form Automation</h2>
+        <p>Experience the future of form-filling with AI that learns, adapts, and anticipates your needs</p>
+      </div>
+      <div class="grid-3">
+        <div class="card feature-card">
+          <div class="feature-icon">💡</div>
+          <h3>AI Learning Engine</h3>
+          <p>Our AI continuously learns from your preferences, becoming more accurate with every form you complete.</p>
+          <ul class="feature-check">
+            <li>Adaptive field recognition</li>
+            <li>Pattern-based suggestions</li>
+            <li>Continuous improvement</li>
+          </ul>
+        </div>
+        <div class="card feature-card">
+          <div class="feature-icon">🌐</div>
+          <h3>Cross-Platform Compatibility</h3>
+          <p>Works seamlessly across all websites, applications, and devices. One profile, infinite possibilities.</p>
+          <ul class="feature-check">
+            <li>Chrome Extension (MV3)</li>
+            <li>Any website support</li>
+            <li>Multi-device sync</li>
+          </ul>
+        </div>
+        <div class="card feature-card">
+          <div class="feature-icon">🛡️</div>
+          <h3>Enterprise-Grade Security</h3>
+          <p>Bank-level encryption, GDPR compliance, and zero-knowledge architecture protect your data.</p>
+          <ul class="feature-check">
+            <li>256-bit AES Encryption</li>
+            <li>GDPR Compliant</li>
+            <li>Zero-Knowledge Architecture</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2>Trusted by Professionals Worldwide</h2>
+        <p>See how FormFillAI transforms productivity across different industries</p>
+      </div>
+      <div class="grid-3">
+        <div class="card testimonial-card">
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:linear-gradient(135deg,#4F46E5,#7C3AED)">SC</div>
+            <div class="author-info"><div class="name">Sarah Chen</div><div class="role">HR Manager, TechCorp</div></div>
+          </div>
+          <blockquote>"FormFillAI reduced our employee onboarding time by 75%. What used to take 2 hours now takes 30 minutes."</blockquote>
+          <div class="savings-badge">✅ Saves 90 hours/month</div>
+        </div>
+        <div class="card testimonial-card">
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:linear-gradient(135deg,#0EA5E9,#6366F1)">MJ</div>
+            <div class="author-info"><div class="name">Marcus Johnson</div><div class="role">Graduate Student, MIT</div></div>
+          </div>
+          <blockquote>"Applied to 50+ internships in one afternoon. The AI perfectly adapted my profile for each application."</blockquote>
+          <div class="savings-badge">✅ 40+ hours saved</div>
+        </div>
+        <div class="card testimonial-card">
+          <div class="testimonial-author">
+            <div class="author-avatar" style="background:linear-gradient(135deg,#10B981,#059669)">ER</div>
+            <div class="author-info"><div class="name">Elena Rodriguez</div><div class="role">Freelance Consultant</div></div>
+          </div>
+          <blockquote>"Client onboarding forms used to be my biggest time sink. Now I can focus on actual consulting work."</blockquote>
+          <div class="savings-badge">✅ 15 hours/week saved</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Transparent Pricing</h2>
+        <p>Choose the plan that fits your form-filling needs</p>
+      </div>
+      <div class="grid-3">
+        <div class="card pricing-card">
+          <h3>Free</h3>
+          <div class="price-amount">$0<span>/month</span></div>
+          <div class="price-label">Perfect for personal use</div>
+          <ul class="price-features">
+            <li>10 forms per month</li>
+            <li>Basic AI learning</li>
+            <li>Email support</li>
+            <li>1 profile</li>
+          </ul>
+          <a href="login.html" class="btn btn-secondary">Get Started</a>
+        </div>
+        <div class="card pricing-card popular">
+          <div class="popular-badge">Most Popular</div>
+          <h3>Pro</h3>
+          <div class="price-amount">$19<span>/month</span></div>
+          <div class="price-label">For power users & professionals</div>
+          <ul class="price-features">
+            <li>Unlimited forms</li>
+            <li>Advanced AI learning</li>
+            <li>Priority support</li>
+            <li>Analytics dashboard</li>
+            <li>5 profiles</li>
+          </ul>
+          <a href="login.html" class="btn btn-primary">Start Pro Trial</a>
+        </div>
+        <div class="card pricing-card">
+          <h3>Enterprise</h3>
+          <div class="price-amount" style="font-size:1.8rem">Custom</div>
+          <div class="price-label">For teams & organizations</div>
+          <ul class="price-features">
+            <li>Unlimited everything</li>
+            <li>Custom integrations</li>
+            <li>Dedicated support</li>
+            <li>SLA guarantee</li>
+            <li>Team management</li>
+          </ul>
+          <a href="mailto:enterprise@formfillai.com" class="btn btn-secondary">Contact Sales</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST BADGES -->
+  <section class="section section-alt">
+    <div class="container">
+      <div class="section-header"><h2>Trusted &amp; Secure</h2><p>Industry-leading security and compliance standards</p></div>
+      <div class="trust-grid">
+        <div class="trust-item"><div class="trust-icon">🔒</div><h4>GDPR Compliant</h4><p>Full compliance with European data protection regulations</p></div>
+        <div class="trust-item"><div class="trust-icon">🔐</div><h4>256-bit Encryption</h4><p>Bank-level security for all your personal data</p></div>
+        <div class="trust-item"><div class="trust-icon">⚡</div><h4>Zero Downtime</h4><p>99.9% uptime guarantee with global infrastructure</p></div>
+        <div class="trust-item"><div class="trust-icon">🎧</div><h4>24/7 Support</h4><p>Round-the-clock assistance from our expert team</p></div>
+      </div>
+      <p style="text-align:center;margin-top:2.5rem;font-size:0.85rem;color:var(--text-light)">Trusted by Leading Platforms</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section">
+    <div class="container" style="max-width:720px">
+      <div class="section-header"><h2>Frequently Asked Questions</h2></div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-question">How does FormFillAI integrate with websites? <span class="faq-icon">+</span></div>
+          <div class="faq-answer">Our Chrome Extension detects form fields on any webpage using smart AI-powered field mapping. When you click "Autofill," it instantly maps your stored profile data to the corresponding fields, regardless of how the form is labeled.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Which browsers are supported? <span class="faq-icon">+</span></div>
+          <div class="faq-answer">Currently, FormFillAI supports Google Chrome and all Chromium-based browsers (Edge, Brave, etc.). Firefox and Safari support is on our roadmap.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Is my data safe and private? <span class="faq-icon">+</span></div>
+          <div class="faq-answer">Absolutely. Your data is encrypted in transit and at rest using 256-bit AES encryption. Each user's data is completely isolated — only you can access your profiles, enforced by Firebase Security Rules.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Can I store multiple profiles? <span class="faq-icon">+</span></div>
+          <div class="faq-answer">Yes! You can create multiple profiles (e.g., personal, professional, banking) and switch between them in the extension before autofilling.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-question">Does it work with React and dynamic forms? <span class="faq-icon">+</span></div>
+          <div class="faq-answer">Yes. Our content script fires both native input events and React synthetic events to ensure compatibility with dynamically rendered forms built with React, Angular, Vue, and other frameworks.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-banner">
+    <div class="container">
+      <h2>Ready to Transform Your<br>Form-Filling Experience?</h2>
+      <p>Join thousands of professionals who save hours every week with intelligent automation</p>
+      <div class="cta-buttons">
+        <a href="login.html" class="btn btn-white btn-lg">🚀 Start Free Profile</a>
+        <a href="demo.html" class="btn btn-outline-white btn-lg">▶ Watch Demo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo"><div class="logo-icon" style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#4F46E5,#8B5CF6);color:white;font-size:0.9rem">⬡</div> FormFillAI</div>
+          <p>Your intelligent AI assistant for effortless form completion across all platforms.</p>
+          <div class="footer-social">
+            <a class="social-btn" href="#">𝕏</a>
+            <a class="social-btn" href="#">in</a>
+            <a class="social-btn" href="#">📷</a>
+          </div>
+        </div>
+        <div class="footer-col"><h4>Product</h4><ul><li><a href="demo.html">Demo</a></li><li><a href="dashboard.html">Dashboard</a></li><li><a href="#">Chrome Extension</a></li><li><a href="#">Mobile App</a></li><li><a href="#">API</a></li></ul></div>
+        <div class="footer-col"><h4>Company</h4><ul><li><a href="#">About</a></li><li><a href="#">Careers</a></li><li><a href="#">Blog</a></li><li><a href="#">Press</a></li><li><a href="#">Contact</a></li></ul></div>
+        <div class="footer-col"><h4>Support</h4><ul><li><a href="#">Help Center</a></li><li><a href="security.html">Privacy</a></li><li><a href="#">Terms</a></li><li><a href="#">Status</a></li><li><a href="#">Community</a></li></ul></div>
+      </div>
+      <div class="footer-bottom">© 2025 FormFillAI. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // FAQ accordion
+    document.querySelectorAll('.faq-question').forEach(q => {
+      q.addEventListener('click', () => {
+        const item = q.parentElement;
+        document.querySelectorAll('.faq-item').forEach(i => { if (i !== item) i.classList.remove('open'); });
+        item.classList.toggle('open');
+      });
+    });
+  </script>
+</body>
+</html>

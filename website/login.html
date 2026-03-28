@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FormFillAI — Login &amp; Sign Up</title>
+  <meta name="description" content="Sign in or create your FormFillAI account to start storing profiles and autofilling forms."/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+  <div class="auth-container">
+    <!-- LEFT PANEL -->
+    <div class="auth-left">
+      <div style="display:flex;align-items:center;gap:0.6rem;margin-bottom:2.5rem">
+        <div class="logo-icon" style="width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:1.1rem">⬡</div>
+        <span style="font-size:1.15rem;font-weight:700">FormFillAI</span>
+      </div>
+      <h2>Fill Any Form in Seconds</h2>
+      <p>Store your profiles once, autofill everywhere — powered by AI that learns your preferences.</p>
+      <div class="auth-features">
+        <div class="auth-feature"><span class="icon">🤖</span><span>AI-powered smart field mapping</span></div>
+        <div class="auth-feature"><span class="icon">☁️</span><span>Secure cloud storage across devices</span></div>
+        <div class="auth-feature"><span class="icon">⚡</span><span>One-click autofill on any website</span></div>
+        <div class="auth-feature"><span class="icon">🔒</span><span>256-bit encryption &amp; GDPR compliant</span></div>
+        <div class="auth-feature"><span class="icon">👤</span><span>Multiple profile support</span></div>
+      </div>
+      <div style="margin-top:auto;padding-top:3rem;font-size:0.8rem;opacity:0.6">
+        Trusted by 12,000+ professionals worldwide
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="auth-right">
+      <div class="auth-box">
+        <h3 id="auth-heading">Welcome back</h3>
+        <p class="subtitle" id="auth-subtitle">Sign in to your FormFillAI account</p>
+
+        <div class="auth-tabs">
+          <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Sign In</button>
+          <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">Create Account</button>
+        </div>
+
+        <!-- Alert -->
+        <div id="auth-alert" style="display:none"></div>
+
+        <!-- LOGIN FORM -->
+        <form id="login-form" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="login-email" class="form-input" placeholder="you@example.com" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" id="login-password" class="form-input" placeholder="Your password" required/>
+          </div>
+          <div style="text-align:right;margin-bottom:1.25rem">
+            <a href="#" onclick="handleForgotPassword(event)" style="font-size:0.82rem;color:var(--primary);font-weight:500">Forgot password?</a>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%" id="login-btn">Sign In →</button>
+          <p style="text-align:center;font-size:0.82rem;margin-top:1.25rem;color:var(--text-muted)">
+            Don't have an account? <a href="#" onclick="switchTab('signup');return false" style="color:var(--primary);font-weight:600">Sign up free</a>
+          </p>
+        </form>
+
+        <!-- SIGNUP FORM -->
+        <form id="signup-form" style="display:none" onsubmit="handleSignup(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">First Name</label>
+              <input type="text" id="signup-firstname" class="form-input" placeholder="John" required/>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Last Name</label>
+              <input type="text" id="signup-lastname" class="form-input" placeholder="Doe" required/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input type="email" id="signup-email" class="form-input" placeholder="you@example.com" required/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" id="signup-password" class="form-input" placeholder="At least 6 characters" required minlength="6"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Confirm Password</label>
+            <input type="password" id="signup-confirm" class="form-input" placeholder="Repeat password" required/>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%" id="signup-btn">Create Account →</button>
+          <p style="text-align:center;font-size:0.82rem;margin-top:1.25rem;color:var(--text-muted)">
+            Already have an account? <a href="#" onclick="switchTab('login');return false" style="color:var(--primary);font-weight:600">Sign in</a>
+          </p>
+          <p style="text-align:center;font-size:0.75rem;margin-top:0.75rem;color:var(--text-light)">
+            By creating an account you agree to our <a href="#" style="color:var(--primary)">Terms</a> and <a href="security.html" style="color:var(--primary)">Privacy Policy</a>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { auth } from './js/firebase-config.js';
+    import {
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      sendPasswordResetEmail,
+      onAuthStateChanged,
+      updateProfile
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { db } from './js/firebase-config.js';
+
+    // Redirect if already logged in
+    onAuthStateChanged(auth, user => {
+      if (user) window.location.href = 'dashboard.html';
+    });
+
+    function showAlert(msg, type = 'error') {
+      const el = document.getElementById('auth-alert');
+      el.innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
+      el.style.display = 'block';
+    }
+    function hideAlert() {
+      const el = document.getElementById('auth-alert');
+      el.style.display = 'none';
+    }
+
+    window.switchTab = function(tab) {
+      hideAlert();
+      const loginForm = document.getElementById('login-form');
+      const signupForm = document.getElementById('signup-form');
+      const tabLogin = document.getElementById('tab-login');
+      const tabSignup = document.getElementById('tab-signup');
+      const heading = document.getElementById('auth-heading');
+      const subtitle = document.getElementById('auth-subtitle');
+      if (tab === 'login') {
+        loginForm.style.display = 'block';
+        signupForm.style.display = 'none';
+        tabLogin.classList.add('active');
+        tabSignup.classList.remove('active');
+        heading.textContent = 'Welcome back';
+        subtitle.textContent = 'Sign in to your FormFillAI account';
+      } else {
+        loginForm.style.display = 'none';
+        signupForm.style.display = 'block';
+        tabLogin.classList.remove('active');
+        tabSignup.classList.add('active');
+        heading.textContent = 'Create your account';
+        subtitle.textContent = 'Start filling forms instantly for free';
+      }
+    };
+
+    window.handleLogin = async function(e) {
+      e.preventDefault();
+      hideAlert();
+      const btn = document.getElementById('login-btn');
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      btn.innerHTML = '<span class="loader"></span> Signing in...';
+      btn.disabled = true;
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        window.location.href = 'dashboard.html';
+      } catch (err) {
+        const msgs = {
+          'auth/user-not-found': 'No account found with this email.',
+          'auth/wrong-password': 'Incorrect password. Please try again.',
+          'auth/invalid-email': 'Please enter a valid email address.',
+          'auth/too-many-requests': 'Too many attempts. Please try again later.',
+          'auth/invalid-credential': 'Invalid email or password.'
+        };
+        showAlert(msgs[err.code] || err.message);
+        btn.innerHTML = 'Sign In →';
+        btn.disabled = false;
+      }
+    };
+
+    window.handleSignup = async function(e) {
+      e.preventDefault();
+      hideAlert();
+      const btn = document.getElementById('signup-btn');
+      const firstName = document.getElementById('signup-firstname').value.trim();
+      const lastName = document.getElementById('signup-lastname').value.trim();
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
+      const confirm = document.getElementById('signup-confirm').value;
+      if (password !== confirm) { showAlert('Passwords do not match.'); return; }
+      btn.innerHTML = '<span class="loader"></span> Creating account...';
+      btn.disabled = true;
+      try {
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        await updateProfile(cred.user, { displayName: `${firstName} ${lastName}` });
+        // Create user document
+        await setDoc(doc(db, 'users', cred.user.uid), {
+          displayName: `${firstName} ${lastName}`,
+          email,
+          createdAt: serverTimestamp()
+        });
+        window.location.href = 'dashboard.html';
+      } catch (err) {
+        const msgs = {
+          'auth/email-already-in-use': 'An account with this email already exists.',
+          'auth/invalid-email': 'Please enter a valid email address.',
+          'auth/weak-password': 'Password must be at least 6 characters.'
+        };
+        showAlert(msgs[err.code] || err.message);
+        btn.innerHTML = 'Create Account →';
+        btn.disabled = false;
+      }
+    };
+
+    window.handleForgotPassword = async function(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      if (!email) { showAlert('Enter your email address above first.'); return; }
+      try {
+        await sendPasswordResetEmail(auth, email);
+        showAlert('Password reset email sent! Check your inbox.', 'success');
+      } catch (err) {
+        showAlert('Could not send reset email. Check your email address.');
+      }
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FormFillAI — Dashboard</title>
+  <meta name="description" content="Manage your FormFillAI profiles, store personal and banking data securely, and control your autofill settings."/>
+  <link rel="stylesheet" href="css/style.css"/>
+  <style>
+    .ext-banner {
+      background: linear-gradient(135deg, rgba(79,70,229,0.08), rgba(139,92,246,0.08));
+      border: 1.5px solid rgba(79,70,229,0.2);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.75rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      margin-bottom: 2rem; flex-wrap: wrap;
+    }
+    .ext-banner-left { display: flex; align-items: center; gap: 1rem; }
+    .ext-icon { font-size: 2rem; }
+    .section-tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 1.5rem; }
+    .section-tab {
+      padding: 0.65rem 1.25rem; border: none; background: transparent;
+      cursor: pointer; font-weight: 600; font-size: 0.88rem;
+      color: var(--text-muted); border-bottom: 2px solid transparent;
+      margin-bottom: -2px; transition: var(--transition); font-family: 'Inter', sans-serif;
+    }
+    .section-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+    .section-panel { display: none; }
+    .section-panel.active { display: block; }
+    .profile-bank-chip { display: inline-flex; align-items: center; gap: 0.3rem; background: rgba(16,185,129,0.1); color: var(--success); font-size: 0.72rem; font-weight: 600; padding: 0.2rem 0.5rem; border-radius: var(--radius-full); }
+    .loading-screen { position: fixed; inset:0; background: white; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 1rem; z-index: 999; }
+    .loading-logo { font-size: 3rem; animation: pulse 1.5s ease infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  </style>
+</head>
+<body>
+  <!-- LOADING SCREEN -->
+  <div class="loading-screen" id="loading-screen">
+    <div class="loading-logo">⬡</div>
+    <div style="font-weight:600;color:var(--primary)">FormFillAI</div>
+    <div><span class="loader" style="border-color:rgba(79,70,229,0.2);border-top-color:var(--primary)"></span></div>
+  </div>
+
+  <div id="app" style="display:none">
+    <!-- NAVBAR -->
+    <nav class="navbar">
+      <a class="navbar-brand" href="index.html"><div class="logo-icon">⬡</div>FormFillAI</a>
+      <div class="navbar-links">
+        <a href="index.html">Home</a>
+        <a href="demo.html">Demo</a>
+        <a href="security.html">Security</a>
+      </div>
+      <div class="navbar-cta">
+        <div class="user-menu">
+          <div class="user-avatar" id="user-avatar" onclick="toggleDropdown()">?</div>
+          <div class="user-dropdown" id="user-dropdown">
+            <div style="padding:1rem;border-bottom:1px solid var(--border)">
+              <div style="font-weight:600;font-size:0.88rem" id="dropdown-name">Loading...</div>
+              <div style="font-size:0.78rem;color:var(--text-muted)" id="dropdown-email"></div>
+            </div>
+            <div class="dropdown-item" onclick="showSection('profiles')">👤 My Profiles</div>
+            <div class="dropdown-item" onclick="showSection('settings')">⚙️ Settings</div>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-item danger" onclick="handleLogout()">🚪 Sign Out</div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container" style="max-width:1100px;padding-top:2rem;padding-bottom:3rem">
+      <!-- STATS ROW -->
+      <div class="stats-row" id="stats-row">
+        <div class="stat-card"><div class="stat-icon">👤</div><div class="stat-value" id="stat-profiles">0</div><div class="stat-name">Profiles Saved</div></div>
+        <div class="stat-card"><div class="stat-icon">🔒</div><div class="stat-value">256-bit</div><div class="stat-name">Encryption</div></div>
+        <div class="stat-card"><div class="stat-icon">⚡</div><div class="stat-value">1-Click</div><div class="stat-name">Autofill</div></div>
+        <div class="stat-card"><div class="stat-icon">🌐</div><div class="stat-value">∞</div><div class="stat-name">Sites Supported</div></div>
+      </div>
+
+      <!-- EXTENSION BANNER -->
+      <div class="ext-banner">
+        <div class="ext-banner-left">
+          <span class="ext-icon">🧩</span>
+          <div>
+            <div style="font-weight:700;margin-bottom:0.15rem">Install Chrome Extension</div>
+            <div style="font-size:0.82rem;color:var(--text-muted)">Load the extension in Developer Mode to autofill any form with one click</div>
+          </div>
+        </div>
+        <a href="../extension/" class="btn btn-primary btn-sm">Get Extension →</a>
+      </div>
+
+      <!-- SECTION TABS -->
+      <div class="section-tabs">
+        <button class="section-tab active" onclick="showSection('profiles')" id="tab-profiles">👤 My Profiles</button>
+        <button class="section-tab" onclick="showSection('settings')" id="tab-settings">⚙️ Settings</button>
+      </div>
+
+      <!-- PROFILES PANEL -->
+      <div class="section-panel active" id="panel-profiles">
+        <div class="dashboard-header" style="margin-bottom:1.5rem">
+          <div class="dashboard-title">
+            <h2>My Profiles</h2>
+            <p>Manage your stored data profiles for autofill</p>
+          </div>
+          <button class="btn btn-primary" onclick="openModal()">+ Add Profile</button>
+        </div>
+        <div class="profiles-grid" id="profiles-grid">
+          <div style="grid-column:1/-1;padding:3rem 0;text-align:center">
+            <span class="loader" style="border-color:rgba(79,70,229,0.2);border-top-color:var(--primary)"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SETTINGS PANEL -->
+      <div class="section-panel" id="panel-settings">
+        <h3 style="margin-bottom:1.5rem">Account Settings</h3>
+        <div class="card" style="max-width:520px;margin-bottom:1.5rem">
+          <h4 style="margin-bottom:1rem">Account Info</h4>
+          <div class="form-group"><label class="form-label">Display Name</label><input type="text" class="form-input" id="settings-name"/></div>
+          <div class="form-group"><label class="form-label">Email</label><input type="email" class="form-input" id="settings-email" readonly style="opacity:0.6"/></div>
+          <button class="btn btn-primary" onclick="saveSettings()">Save Changes</button>
+        </div>
+        <div class="card" style="max-width:520px">
+          <h4 style="margin-bottom:0.5rem;color:var(--danger)">Danger Zone</h4>
+          <p style="font-size:0.85rem;margin-bottom:1rem">Permanently sign out from this device.</p>
+          <button class="btn btn-danger" onclick="handleLogout()">Sign Out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD / EDIT PROFILE MODAL -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModalOnOverlay(event)">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="modal-title">Add New Profile</h3>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+
+      <div class="tab-group" style="flex-wrap:wrap">
+        <button class="tab-btn active" onclick="switchModalTab('personal', this)">👤 Personal</button>
+        <button class="tab-btn" onclick="switchModalTab('address', this)">📍 Address</button>
+        <button class="tab-btn" onclick="switchModalTab('identity', this)">🪪 Identity</button>
+        <button class="tab-btn" onclick="switchModalTab('education', this)">🎓 Education</button>
+        <button class="tab-btn" onclick="switchModalTab('professional', this)">💼 Professional</button>
+        <button class="tab-btn" onclick="switchModalTab('banking', this)">🏦 Banking</button>
+      </div>
+
+      <!-- ===== PERSONAL ===== -->
+      <div class="tab-panel active" id="modal-tab-personal">
+        <div class="modal-section">
+          <h4>Personal Information</h4>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">First Name *</label><input type="text" class="form-input" id="f-firstname" placeholder="Ravi"/></div>
+            <div class="form-group"><label class="form-label">Middle Name</label><input type="text" class="form-input" id="f-middlename" placeholder="Shankar"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Last Name *</label><input type="text" class="form-input" id="f-lastname" placeholder="Kumar"/></div>
+            <div class="form-group"><label class="form-label">Date of Birth</label><input type="date" class="form-input" id="f-dob"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Gender</label>
+              <select class="form-input form-select" id="f-gender">
+                <option value="">Select…</option>
+                <option>Male</option><option>Female</option><option>Transgender</option><option>Prefer not to say</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Marital Status</label>
+              <select class="form-input form-select" id="f-marital">
+                <option value="">Select…</option>
+                <option>Single</option><option>Married</option><option>Divorced</option><option>Widowed</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Father's Name</label><input type="text" class="form-input" id="f-fathername" placeholder="Ramesh Kumar"/></div>
+            <div class="form-group"><label class="form-label">Mother's Name</label><input type="text" class="form-input" id="f-mothername" placeholder="Sunita Devi"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Email Address *</label><input type="email" class="form-input" id="f-email" placeholder="ravi@example.com"/></div>
+            <div class="form-group"><label class="form-label">Phone / Mobile</label><input type="tel" class="form-input" id="f-phone" placeholder="+91 99999 99999"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Alternate Phone</label><input type="tel" class="form-input" id="f-altphone" placeholder="+91 88888 88888"/></div>
+            <div class="form-group"><label class="form-label">Nationality</label><input type="text" class="form-input" id="f-nationality" placeholder="Indian"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Religion</label>
+              <select class="form-input form-select" id="f-religion">
+                <option value="">Select…</option>
+                <option>Hindu</option><option>Muslim</option><option>Christian</option><option>Sikh</option><option>Buddhist</option><option>Jain</option><option>Others</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Languages Known</label><input type="text" class="form-input" id="f-languages" placeholder="Hindi, English, Telugu"/></div>
+          </div>
+          <div class="form-group"><label class="form-label">Website / Portfolio</label><input type="url" class="form-input" id="f-website" placeholder="https://yourwebsite.com"/></div>
+        </div>
+      </div>
+
+      <!-- ===== ADDRESS ===== -->
+      <div class="tab-panel" id="modal-tab-address">
+        <div class="modal-section">
+          <h4>Permanent Address</h4>
+          <div class="form-group"><label class="form-label">House No. / Flat / Street</label><input type="text" class="form-input" id="f-address" placeholder="H.No. 12, MG Road"/></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Village / Area / Locality</label><input type="text" class="form-input" id="f-area" placeholder="Himayatnagar"/></div>
+            <div class="form-group"><label class="form-label">Post Office</label><input type="text" class="form-input" id="f-postoffice" placeholder="Somajiguda P.O."/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">District</label><input type="text" class="form-input" id="f-district" placeholder="Hyderabad"/></div>
+            <div class="form-group"><label class="form-label">Taluka / Tehsil / Mandal</label><input type="text" class="form-input" id="f-taluka" placeholder="Secunderabad"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">City / Town</label><input type="text" class="form-input" id="f-city" placeholder="Hyderabad"/></div>
+            <div class="form-group"><label class="form-label">State</label><input type="text" class="form-input" id="f-state" placeholder="Telangana"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">PIN / ZIP Code</label><input type="text" class="form-input" id="f-zip" placeholder="500029"/></div>
+            <div class="form-group"><label class="form-label">Country</label><input type="text" class="form-input" id="f-country" placeholder="India"/></div>
+          </div>
+          <div class="form-group"><label class="form-label">Domicile State</label><input type="text" class="form-input" id="f-domicile" placeholder="Telangana"/></div>
+        </div>
+        <div class="modal-section">
+          <h4>Correspondence Address <span style="font-weight:400;font-size:0.82rem;color:var(--text-muted)">(if different)</span></h4>
+          <div class="form-group"><label class="form-label">Street / Area</label><input type="text" class="form-input" id="f-corraddress" placeholder="Same as permanent or enter new"/></div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">City</label><input type="text" class="form-input" id="f-corrcity" placeholder="City"/></div>
+            <div class="form-group"><label class="form-label">State</label><input type="text" class="form-input" id="f-corrstate" placeholder="State"/></div>
+          </div>
+          <div class="form-group"><label class="form-label">PIN Code</label><input type="text" class="form-input" id="f-corrzip" placeholder="500001"/></div>
+        </div>
+      </div>
+
+      <!-- ===== IDENTITY / GOVT ===== -->
+      <div class="tab-panel" id="modal-tab-identity">
+        <div class="modal-section">
+          <h4>Category &amp; Reservation</h4>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Category</label>
+              <select class="form-input form-select" id="f-category">
+                <option value="">Select…</option>
+                <option>General / UR</option><option>OBC</option><option>OBC-NCL</option><option>SC</option><option>ST</option><option>EWS</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Sub-Category / Caste</label><input type="text" class="form-input" id="f-caste" placeholder="Enter caste if applicable"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">PwD (Physically Handicapped)?</label>
+              <select class="form-input form-select" id="f-pwd">
+                <option value="">Select…</option>
+                <option>No</option><option>Yes - VH</option><option>Yes - HH</option><option>Yes - OH</option><option>Yes - Other</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Ex-Serviceman?</label>
+              <select class="form-input form-select" id="f-exserviceman">
+                <option value="">Select…</option><option>No</option><option>Yes</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-section">
+          <h4>Government ID Numbers</h4>
+          <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:var(--radius);padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:#92400E">⚠️ ID numbers are stored encrypted and secure.</div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Aadhar Number</label><input type="text" class="form-input" id="f-aadhar" placeholder="XXXX XXXX XXXX" maxlength="14"/></div>
+            <div class="form-group"><label class="form-label">PAN Number</label><input type="text" class="form-input" id="f-pan" placeholder="ABCDE1234F" maxlength="10"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Voter ID</label><input type="text" class="form-input" id="f-voterid" placeholder="ABC1234567"/></div>
+            <div class="form-group"><label class="form-label">Passport Number</label><input type="text" class="form-input" id="f-passport" placeholder="A1234567"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Driving Licence</label><input type="text" class="form-input" id="f-drivinglicence" placeholder="TS09 20200012345"/></div>
+            <div class="form-group"><label class="form-label">Application / Roll Number</label><input type="text" class="form-input" id="f-rollno" placeholder="Exam roll no. if needed"/></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== EDUCATION ===== -->
+      <div class="tab-panel" id="modal-tab-education">
+        <div class="modal-section">
+          <h4>🏫 10th (SSC / Matriculation / SSLC)</h4>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">School Name</label><input type="text" class="form-input" id="f-school10" placeholder="St. Mary's High School"/></div>
+            <div class="form-group"><label class="form-label">Board</label><input type="text" class="form-input" id="f-board10" placeholder="CBSE / SSC / ICSE"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Year of Passing</label><input type="text" class="form-input" id="f-year10" placeholder="2015"/></div>
+            <div class="form-group"><label class="form-label">Marks Type</label>
+              <select class="form-input form-select" id="f-markstype10">
+                <option value="">Select…</option><option>Percentage</option><option>CGPA</option><option>Grade</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Marks Obtained</label><input type="text" class="form-input" id="f-marks10" placeholder="425"/></div>
+            <div class="form-group"><label class="form-label">Max Marks</label><input type="text" class="form-input" id="f-maxmarks10" placeholder="500"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Percentage (%)</label><input type="text" class="form-input" id="f-percent10" placeholder="85.0"/></div>
+            <div class="form-group"><label class="form-label">Roll Number</label><input type="text" class="form-input" id="f-rollno10" placeholder="TS2015XXXXX"/></div>
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <h4>🏫 12th (HSC / Intermediate / +2 / PUC)</h4>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">School / College Name</label><input type="text" class="form-input" id="f-school12" placeholder="Narayana Junior College"/></div>
+            <div class="form-group"><label class="form-label">Board</label><input type="text" class="form-input" id="f-board12" placeholder="BIE / CBSE / CHSE"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Stream</label>
+              <select class="form-input form-select" id="f-stream12">
+                <option value="">Select…</option><option>Science (PCM)</option><option>Science (PCB)</option><option>Commerce</option><option>Arts / Humanities</option><option>Vocational</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">Year of Passing</label><input type="text" class="form-input" id="f-year12" placeholder="2017"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Marks Obtained</label><input type="text" class="form-input" id="f-marks12" placeholder="890"/></div>
+            <div class="form-group"><label class="form-label">Max Marks</label><input type="text" class="form-input" id="f-maxmarks12" placeholder="1000"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Percentage (%)</label><input type="text" class="form-input" id="f-percent12" placeholder="89.0"/></div>
+            <div class="form-group"><label class="form-label">Roll Number</label><input type="text" class="form-input" id="f-rollno12" placeholder="XXXXXX"/></div>
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <h4>🎓 Graduation / Bachelor's Degree</h4>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">College Name</label><input type="text" class="form-input" id="f-college" placeholder="Osmania University College"/></div>
+            <div class="form-group"><label class="form-label">University</label><input type="text" class="form-input" id="f-university" placeholder="Osmania University"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Degree / Course</label><input type="text" class="form-input" id="f-degree" placeholder="B.Tech / B.Sc / B.A / BCA"/></div>
+            <div class="form-group"><label class="form-label">Branch / Specialization</label><input type="text" class="form-input" id="f-branch" placeholder="Computer Science"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Year of Passing</label><input type="text" class="form-input" id="f-yeardegree" placeholder="2021"/></div>
+            <div class="form-group"><label class="form-label">Duration</label><input type="text" class="form-input" id="f-durationdegree" placeholder="4 Years"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Marks Obtained</label><input type="text" class="form-input" id="f-marksdegree" placeholder="750"/></div>
+            <div class="form-group"><label class="form-label">Max Marks</label><input type="text" class="form-input" id="f-maxmarksdegree" placeholder="1000"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Percentage / CGPA</label><input type="text" class="form-input" id="f-percentdegree" placeholder="75.0"/></div>
+            <div class="form-group"><label class="form-label">Enrolment / Roll No.</label><input type="text" class="form-input" id="f-enrolldegree" placeholder="17A31A0501"/></div>
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <h4>🎓 Post Graduation / Master's</h4>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">College / Institute</label><input type="text" class="form-input" id="f-pgcollege" placeholder="IIT Hyderabad"/></div>
+            <div class="form-group"><label class="form-label">University</label><input type="text" class="form-input" id="f-pguniversity" placeholder="IIT Hyderabad"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Degree / Course</label><input type="text" class="form-input" id="f-pgdegree" placeholder="M.Tech / M.Sc / MBA / MCA"/></div>
+            <div class="form-group"><label class="form-label">Specialization</label><input type="text" class="form-input" id="f-pgbranch" placeholder="Data Science"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Year of Passing</label><input type="text" class="form-input" id="f-yearpg" placeholder="2023"/></div>
+            <div class="form-group"><label class="form-label">Percentage / CGPA</label><input type="text" class="form-input" id="f-percentpg" placeholder="8.2"/></div>
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <h4>📜 Other Qualifications / Diploma / ITI</h4>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Qualification Name</label><input type="text" class="form-input" id="f-diploma" placeholder="Diploma / ITI / CA / CFA"/></div>
+            <div class="form-group"><label class="form-label">Institute</label><input type="text" class="form-input" id="f-diplomainstitute" placeholder="NTTF / ICA / ITI Centre"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Year</label><input type="text" class="form-input" id="f-diplomayear" placeholder="2019"/></div>
+            <div class="form-group"><label class="form-label">Score / Grade</label><input type="text" class="form-input" id="f-diplomascore" placeholder="A+ / 85%"/></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== PROFESSIONAL ===== -->
+      <div class="tab-panel" id="modal-tab-professional">
+        <div class="modal-section">
+          <h4>Work Experience</h4>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Current / Last Employer</label><input type="text" class="form-input" id="f-company" placeholder="TechCorp Ltd."/></div>
+            <div class="form-group"><label class="form-label">Designation / Job Title</label><input type="text" class="form-input" id="f-jobtitle" placeholder="Software Engineer"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Total Experience</label><input type="text" class="form-input" id="f-experience" placeholder="3 Years 6 Months"/></div>
+            <div class="form-group"><label class="form-label">Employment Type</label>
+              <select class="form-input form-select" id="f-emptype">
+                <option value="">Select…</option>
+                <option>Government</option><option>PSU</option><option>Private</option><option>Self-Employed</option><option>Fresher / No Experience</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Service Start Date</label><input type="date" class="form-input" id="f-servicestart"/></div>
+            <div class="form-group"><label class="form-label">Service End Date</label><input type="date" class="form-input" id="f-serviceend"/></div>
+          </div>
+        </div>
+        <div class="modal-section">
+          <h4>Skills &amp; Online Presence</h4>
+          <div class="form-group"><label class="form-label">Skills / Technologies / Keywords</label><input type="text" class="form-input" id="f-skills" placeholder="Java, Python, SQL, MS Office…"/></div>
+          <div class="form-group"><label class="form-label">LinkedIn URL</label><input type="url" class="form-input" id="f-linkedin" placeholder="https://linkedin.com/in/yourname"/></div>
+          <div class="form-group"><label class="form-label">Bio / Profile Summary</label><textarea class="form-input" id="f-bio" rows="3" placeholder="Brief professional summary…" style="resize:vertical"></textarea></div>
+        </div>
+      </div>
+
+      <!-- ===== BANKING ===== -->
+      <div class="tab-panel" id="modal-tab-banking">
+        <div class="modal-section">
+          <h4>Bank Account Details</h4>
+          <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.25);border-radius:var(--radius);padding:0.75rem 1rem;margin-bottom:1rem;font-size:0.82rem;color:#92400E">⚠️ Banking data is encrypted and stored securely.</div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Bank Name</label><input type="text" class="form-input" id="f-bankname" placeholder="State Bank of India"/></div>
+            <div class="form-group"><label class="form-label">Branch Name</label><input type="text" class="form-input" id="f-bankbranch" placeholder="Ameerpet Branch"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Account Number</label><input type="text" class="form-input" id="f-accountnum" placeholder="XXXXXXXXXX"/></div>
+            <div class="form-group"><label class="form-label">IFSC Code</label><input type="text" class="form-input" id="f-ifsc" placeholder="SBIN0001234"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Account Type</label>
+              <select class="form-input form-select" id="f-accounttype">
+                <option value="">Select…</option>
+                <option>Savings</option><option>Current</option><option>Salary</option><option>Jan Dhan</option>
+              </select>
+            </div>
+            <div class="form-group"><label class="form-label">MICR Code</label><input type="text" class="form-input" id="f-micr" placeholder="500002085"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Account Holder Name</label><input type="text" class="form-input" id="f-cardholder" placeholder="Ravi Kumar"/></div>
+            <div class="form-group"><label class="form-label">UPI ID</label><input type="text" class="form-input" id="f-upi" placeholder="ravi@sbi"/></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Card Number (Last 4 only)</label><input type="text" class="form-input" id="f-cardnum" maxlength="19" placeholder="•••• •••• •••• 4242"/></div>
+            <div class="form-group"><label class="form-label">Card Expiry</label><input type="text" class="form-input" id="f-expiry" placeholder="MM/YY" maxlength="5"/></div>
+          </div>
+          <div class="form-group"><label class="form-label">Routing / SWIFT (International)</label><input type="text" class="form-input" id="f-routing" placeholder="SBININBB"/></div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" id="modal-save-btn" onclick="saveProfile()">Save Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-container"></div>
+
+  <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>
