@@ -1,20 +1,22 @@
-// FormFillAI — Firebase Configuration
+// ========================================================
+// TEMPLATE FILE — Copy this to firebase-config.js locally
+// Fill in your REAL values from Firebase Console
+// ⚠️ firebase-config.js is in .gitignore (won't go to GitHub)
+// ========================================================
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
 
-// ⚠️ SECURITY: Do NOT commit real API keys to GitHub!
-// Copy firebase-config.template.js → firebase-config.js locally and fill in your real values.
-// firebase-config.js is listed in .gitignore so it won't be uploaded.
 const firebaseConfig = {
   apiKey: "YOUR_FIREBASE_API_KEY_HERE",
-  authDomain: "formfiller-pro-1eb71.firebaseapp.com",
-  projectId: "formfiller-pro-1eb71",
-  storageBucket: "formfiller-pro-1eb71.firebasestorage.app",
-  messagingSenderId: "902823761371",
-  appId: "1:902823761371:web:4ff86f39cd17e1db9143fe",
-  measurementId: "G-ER483D6271"
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.firebasestorage.app",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID",
+  measurementId: "YOUR_MEASUREMENT_ID"
 };
 
 const app = initializeApp(firebaseConfig);

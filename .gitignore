@@ -1,0 +1,12 @@
+# ⚠️ SECURITY — Never commit real API keys or secrets to GitHub
+# Keep these files LOCAL only:
+website/js/firebase-config.js
+extension/config.js
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor folders
+.vscode/
+.idea/

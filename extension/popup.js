@@ -1,7 +1,9 @@
 // FormFillAI Chrome Extension — Popup Logic
 // Uses Firebase REST API (no module imports needed in popup scripts)
 
-const FIREBASE_API_KEY = 'AIzaSyDDCJQHjclB8cWnuKV2tGy87vg2Tsb7IoI';
+// ⚠️ DO NOT hardcode API keys here. Load from config.js (see config.template.js)
+// Create a config.js file locally (it is gitignored) with your real API key.
+const FIREBASE_API_KEY = typeof FORMFILLAI_CONFIG !== 'undefined' ? FORMFILLAI_CONFIG.apiKey : 'YOUR_FIREBASE_API_KEY_HERE';
 const FIREBASE_PROJECT = 'formfiller-pro-1eb71';
 const AUTH_URL = 'https://identitytoolkit.googleapis.com/v1/accounts';
 const FIRESTORE_URL = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT}/databases/(default)/documents`;
